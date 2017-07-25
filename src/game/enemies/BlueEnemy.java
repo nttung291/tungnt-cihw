@@ -16,7 +16,6 @@ public class BlueEnemy extends GameObject {
 
     public Vector2D velocity;
     boolean bulletDisabled;
-    public static Vector2D ePosition;
 
     private ImageRenderer imageRenderer1;
     private ImageRenderer imageRenderer2;
@@ -35,7 +34,6 @@ public class BlueEnemy extends GameObject {
         this.imageRenderer3 = new ImageRenderer(Utils.loadAssetImage("enemies/level0/blue/2.png"));
         this.imageRenderer4 = new ImageRenderer(Utils.loadAssetImage("enemies/level0/blue/3.png"));
         velocity = new Vector2D();
-        ePosition = new Vector2D();
         boxCollider = new BoxCollider(20,20);
         this.children.add(boxCollider);
         indentify = 3;
@@ -57,7 +55,7 @@ public class BlueEnemy extends GameObject {
                 }
             }
         }
-        ePosition = this.position;
+        EnemySpawner.ePosition= position;
     }
     private void shoot() {
        if (!bulletDisabled && this.position.y > randy){

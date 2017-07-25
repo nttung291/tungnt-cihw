@@ -2,6 +2,8 @@ package game.bases;
 
 import java.util.Vector;
 
+import static game.background.Settings.blackLife;
+
 /**
  * Created by Nttung PC on 7/24/2017.
  */
@@ -14,8 +16,20 @@ public class OverLap extends GameObject{
                 if (g1.boxCollider!=null && g2.boxCollider!=null){
                     if(g1.boxCollider.collideWith(g2.boxCollider)){
                        if(g1.indentify != g2.indentify){
-                           removeGameObjects.add(g1);
-                           removeGameObjects.add(g2);
+                           if (g1.indentify != 4&&g2.indentify != 4){
+                               removeGameObjects.add(g1);
+                               removeGameObjects.add(g2);
+                           }
+                           else{
+                               if(g1.indentify == 2) removeGameObjects.add(g1);
+                               else removeGameObjects.add(g2);
+                               blackLife-=1;
+                               System.out.println(blackLife);
+                               if (blackLife == 0){
+                                   removeGameObjects.add(g1);
+                                   removeGameObjects.add(g2);
+                               }
+                           }
                        }
                     }
                 }

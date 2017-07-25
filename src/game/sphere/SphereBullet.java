@@ -5,7 +5,7 @@ import game.bases.BoxCollider;
 import game.bases.GameObject;
 import game.bases.ImageRenderer;
 import game.bases.Vector2D;
-import game.enemies.BlueEnemy;
+import game.enemies.EnemySpawner;
 
 /**
  * Created by Nttung PC on 7/24/2017.
@@ -21,7 +21,7 @@ public class SphereBullet extends GameObject {
     }
 
     public void newBullet() {
-        Vector2D target = BlueEnemy.ePosition;
+        Vector2D target = EnemySpawner.ePosition;
         Vector2D bulletVelocity = target.subtract(position).nomalize().multiply(10);
         this.velocity.set(bulletVelocity);
         indentify = 2;

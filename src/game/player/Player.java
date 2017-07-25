@@ -37,6 +37,7 @@ public class Player extends GameObject{
         rightSphere = new Spheres(20,0);
         this.children.add(leftSphere);
         this.children.add(rightSphere);
+        indentify = 1;
     }
 
 

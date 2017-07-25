@@ -17,6 +17,8 @@ public class Settings {
     public static FrameCounter frameCounterSpellImage = new FrameCounter(5);;
     public static FrameCounter frameCounterBlueImage = new FrameCounter(4);
     public static FrameCounter coolDownSpellSphereCounter = new FrameCounter(50);
+    public static int playerLife = 100;
+    public static int blackLife = 100;
 
 }
 
