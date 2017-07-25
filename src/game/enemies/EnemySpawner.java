@@ -1,71 +1,54 @@
 package game.enemies;
 
-import game.bases.FrameCounter;
 import game.bases.GameObject;
+import game.bases.Vector2D;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import static game.background.Settings.frameCounterBlueEnemy;
 
 /**
  * Created by Nttung PC on 7/18/2017.
  */
 public class EnemySpawner extends GameObject {
-    public ArrayList<PinkEnemies>  pinkEnemies;
-    public BlackEnemy blackEnemy;
+    public BlueEnemy blueEnemies;
+//    public BlackEnemy blackEnemy;
 
-    FrameCounter coolDownCounter;
-    FrameCounter frameCounterblackEnemy;
+
     boolean enemiesDisabled;
     boolean blackEnemyDisabled;
 
     public EnemySpawner() {
-        this.blackEnemy = new BlackEnemy();
-        this.pinkEnemies = new ArrayList<>();
-        this.coolDownCounter = new FrameCounter(50);
-        this.frameCounterblackEnemy = new FrameCounter(500);
+//        this.blackEnemy = new BlackEnemy();
         this.blackEnemyDisabled = false;
+        blueEnemies = new BlueEnemy();
     }
 
     public void spawnBlue(){
         if (!enemiesDisabled&&!blackEnemyDisabled){
-            PinkEnemies pinkEnemy = new PinkEnemies();
-            pinkEnemies.add(pinkEnemy);
-            GameObject.add(pinkEnemy);
+            blueEnemies = new BlueEnemy();
+            GameObject.add(blueEnemies);
             enemiesDisabled = true;
         }
     }
 
     public void coolDown() {
         if(enemiesDisabled){
-            boolean status = coolDownCounter.run();
+            boolean status = frameCounterBlueEnemy.run();
             if (status){
                 enemiesDisabled = false;
-                coolDownCounter.reset();
+                frameCounterBlueEnemy.reset();
             }
         }
     }
 
-    public void spawnBlack(){
-        if(!blackEnemyDisabled ){
-            GameObject.add(blackEnemy);
-            blackEnemyDisabled = true;
-        }
-    }
-    public void remove(){
-        Iterator<PinkEnemies>  iterator = pinkEnemies.iterator();
-        while(iterator.hasNext()){
-            PinkEnemies pinkEnemy = iterator.next();
-            if(pinkEnemy.position.x < 0 || pinkEnemy.position.x > 375 || pinkEnemy.position.y > 800 || pinkEnemy.position.y < 0){
-                iterator.remove();
-            }
-        }
-    }
+//    public void spawnBlack(){
+//        if(!blackEnemyDisabled && frameCounterblackEnemy.run()){
+//            GameObject.add(blackEnemy);
+//            blackEnemyDisabled = true;
+//        }
+//    }
     @Override
-    public void run() {
+    public void run(Vector2D parentPosition) {
         spawnBlue();
         coolDown();
-        spawnBlack();
-        remove();
     }
-
 }

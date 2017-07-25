@@ -1,26 +1,28 @@
 package game.bases;
 
+import game.background.BackGround;
+
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Vector;
 
 /**
  * Created by Nttung PC on 7/18/2017.
  */
 public class GameObject {
-    public Vector2D position;
+    public Vector2D position; // Relative
+    public Vector2D screenPosition; //Screen
     public  ImageRenderer renderer;
+    public BoxCollider boxCollider;
+    public int indentify;
+
+    public Vector<GameObject> children;
 
     private static Vector<GameObject> gameObjects = new Vector<>();
     public  static Vector<GameObject> newGameObjects = new Vector<>();
+    public static Vector<GameObject> removeGameObjects = new Vector<>();
 
     public static void add(GameObject gameObject){
         newGameObjects.add(gameObject);
-    }
-    public static void addArr(ArrayList<GameObject> gameObjects){
-        for (GameObject gameObject : gameObjects){
-            newGameObjects.add(gameObject);
-        }
     }
     public static void renderALL(Graphics2D g2d){
         for (GameObject gameObject : gameObjects){
@@ -29,26 +31,28 @@ public class GameObject {
     }
     public static void runall(){
         for (GameObject gameObject : gameObjects){
-            gameObject.run();
+            gameObject.run(Vector2D.ZERO);
         }
+        OverLap.checkOverLap(gameObjects,removeGameObjects);
+        gameObjects.removeAll(removeGameObjects);
+        removeGameObjects.clear();
         gameObjects.addAll(newGameObjects);
         newGameObjects.clear();
     }
     public GameObject() {
         this.position = new Vector2D();
+        this.screenPosition = new Vector2D();
+        this.children = new Vector<>();
         this.renderer = null;
     }
 
     public void render(Graphics2D g2d){
-        if (renderer != null && !out()){
-            renderer.render(g2d,this.position);
+        if (renderer != null && this.position.x <= BackGround.Width-8){
+            renderer.render(g2d,this.screenPosition);
         }
-    }
-    public boolean out(){
-        if (position.x < 0 || position.x > 375 || position.y > 800 || position.y < 0){
-            return true;
+        for (GameObject child : this.children){
+            child.render(g2d);
         }
-        return false;
     }
 
     public void updatePicture() {
@@ -61,9 +65,11 @@ public class GameObject {
         }
     }
 
-    public void run(){
-
-
+    public void run(Vector2D parentPosition){
+       this.screenPosition = parentPosition.add(position);
+       for (GameObject child : children){
+           child.run(this.screenPosition);
+       }
     }
 
 }

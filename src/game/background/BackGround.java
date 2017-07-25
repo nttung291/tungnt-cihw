@@ -9,25 +9,23 @@ import game.bases.Vector2D;
  * Created by Nttung PC on 7/18/2017.
  */
 public class BackGround extends GameObject{
-
+    public static float Width;
     public BackGround() {
-        position = new Vector2D();
+        super();
         this.renderer = new ImageRenderer(Utils.loadAssetImage("background/0.png"));
+        this.renderer.anchor.set(0,1);
+        Width = this.renderer.image.getWidth();
     }
 
-    public void setPosition(float x,float y){
-        position.x = x;
-        position.y = y;
-    }
 
     @Override
-    public void run() {
+    public void run(Vector2D parentPosition) {
         move();
     }
 
     public void move(){
-        if(position.y <= 0){
-            position.addUp(0,3);
+        if ((this.screenPosition.y  - this.renderer.getHeight()) < 0){
+            screenPosition.addUp(0, 2);
         }
     }
 }

@@ -7,7 +7,7 @@ public class Vector2D {
 
     public float x;
     public float y;
-
+    public static final Vector2D ZERO = new Vector2D(0,0);
     public Vector2D(float x, float y) {
         this.x = x;
         this.y = y;
@@ -38,13 +38,8 @@ public class Vector2D {
         return (float) Math.sqrt(x*x + y*y);
     }
 
-    public void multiplyBy(int a) {
-        this.x *= a;
-        this.y *= a;
-    }
-
-    public Vector2D multiply(int a) {
-        return new Vector2D(this.x * a, this.y * a);
+    public Vector2D multiply(float f) {
+       return new Vector2D(this.x*f,this.y*f);
     }
 
     public Vector2D nomalize() {
@@ -61,7 +56,11 @@ public class Vector2D {
     }
 
     public Vector2D subtract(Vector2D vector2D) {
-        return new Vector2D(this.x - vector2D.x, this.y - vector2D.y);
+        return subtract(vector2D.x,vector2D.y);
+    }
+
+    public Vector2D subtract(float x, float y) {
+        return new Vector2D(this.x - x, this.y - y);
     }
 
     public void set(float x, float y) {
@@ -73,4 +72,14 @@ public class Vector2D {
         set(vector2D.x, vector2D.y);
     }
 
+    public Vector2D turn(float p){
+        return new Vector2D((float)(x*Math.cos(p)-y*Math.sin(p)),(float)(x*Math.sin(p) + y*Math.cos(p)));
+    }
+    @Override
+    public String toString() {
+        return "Vector2D{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }

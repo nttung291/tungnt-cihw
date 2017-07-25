@@ -22,4 +22,5 @@ public class Contraints {
         position.x = Mathx.clamp(position.x,left,right);
         position.y = Mathx.clamp(position.y,top,bottom);
     }
+
 }

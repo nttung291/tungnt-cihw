@@ -1,5 +1,6 @@
 package game;
 import game.background.BackGround;
+import game.background.Settings;
 import game.bases.Contraints;
 import game.bases.GameObject;
 import game.enemies.EnemySpawner;
@@ -37,21 +38,20 @@ public class GameWindow extends JFrame{
     }
 
     public void addEnemySpwaner(){
-        EnemySpawner enemySpawner = new EnemySpawner();
-        GameObject.add(enemySpawner);
+        GameObject.add(new EnemySpawner());
     }
 
     public void addBackGround(){
         backGround = new BackGround();
-        backGround.setPosition(-backGround.renderer.image.getWidth()/2,this.getHeight()-backGround.renderer.image.getHeight());
+        backGround.screenPosition.y = this.getHeight();
         GameObject.add(backGround);
     }
 
     private void addPlayer(){
         Player player = new Player();
-        player.setContraints(new Contraints(50,this.getHeight()-30,10,backGround.renderer.image.getWidth()-10));
+        player.setContraints(new Contraints(50,this.getHeight()-30,30,Settings.windownWidth-30));
         player.setInputManager(inputManager);
-        player.position.set(backGround.renderer.image.getWidth()/2,this.getHeight()-50);
+        player.position.set(Settings.windownWidth/2,this.getHeight()-50);
         GameObject.add(player);
     }
     private void setupImput() {
@@ -92,7 +92,7 @@ public class GameWindow extends JFrame{
     private void Render() {
         backBufferGraphic2D.setColor(Color.black);
         backBufferGraphic2D.fillRect(0,0,this.getWidth(),this.getHeight());
-        backBufferGraphic2D.drawImage(backGround.renderer.image,0,(int)backGround.position.y,null);
+        backBufferGraphic2D.drawImage(backGround.renderer.image,0, (int) backGround.position.y,null);
         GameObject.updateAllPicture();
         GameObject.renderALL(backBufferGraphic2D);
         Graphics2D g2d = (Graphics2D) this.getGraphics();
@@ -100,7 +100,7 @@ public class GameWindow extends JFrame{
     }
 
     private void setupWindow() {
-        this.setSize(600,800);
+        this.setSize(Settings.gamePlayWidth,Settings.gamePlayHeight);
         this.setResizable(false);
         this.setTitle("Touhou - Remade by tungNT");
         this.addWindowListener(new WindowAdapter() {

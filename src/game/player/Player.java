@@ -3,8 +3,11 @@ package game.player;
 import game.Utils;
 import game.bases.*;
 import game.inputs.InputManager;
+import game.sphere.Spheres;
 
 import java.util.ArrayList;
+
+import static game.background.Settings.coolDownCounterPlayer;
 
 /**
  * Created by Nttung PC on 7/11/2017.
@@ -14,11 +17,13 @@ public class Player extends GameObject{
     Contraints contraints;
     InputManager inputManager;
 
+    Spheres leftSphere;
+    Spheres rightSphere;
     ArrayList<PlayerSpell> playerSpells;
 
-    public static Player newPlayer;
+    public static Player instance;
 
-    FrameCounter coolDownCounter;
+
     boolean spellDisabled;
 
     Vector2D verlocity;
@@ -27,8 +32,11 @@ public class Player extends GameObject{
         this.position = new Vector2D();
         this.verlocity = new Vector2D();
         this.renderer = new ImageRenderer(Utils.loadAssetImage("players/straight/0.png"));
-        this.coolDownCounter = new FrameCounter(17);
-        newPlayer = this;
+        instance = this;
+        leftSphere = new Spheres(-20,0);
+        rightSphere = new Spheres(20,0);
+        this.children.add(leftSphere);
+        this.children.add(rightSphere);
     }
 
 
@@ -37,7 +45,8 @@ public class Player extends GameObject{
     }
 
     @Override
-    public void run() {
+    public void run(Vector2D parentPosition) {
+        super.run(parentPosition);
         move();
         castSpell();
         coolDown();
@@ -54,6 +63,7 @@ public class Player extends GameObject{
             }
         }
     }
+
 
     private void move() {
         this.verlocity.set(0,0);
@@ -80,15 +90,17 @@ public class Player extends GameObject{
 
     public void coolDown() {
         if(spellDisabled){
-            boolean status = coolDownCounter.run();
+            boolean status = coolDownCounterPlayer.run();
             if (status){
                 spellDisabled = false;
-                coolDownCounter.reset();
+                coolDownCounterPlayer.reset();
             }
         }
     }
 
     public void setInputManager(InputManager inputManager) {
+        leftSphere.setInputManager(inputManager);
+        rightSphere.setInputManager(inputManager);
         this.inputManager = inputManager;
     }
 }
