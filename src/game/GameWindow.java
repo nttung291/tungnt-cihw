@@ -1,11 +1,15 @@
 package game;
+
 import game.background.BackGround;
 import game.background.Settings;
 import game.bases.Contraints;
 import game.bases.GameObject;
+import game.enemies.BlackEnemy;
 import game.enemies.EnemySpawner;
 import game.inputs.InputManager;
 import game.player.Player;
+import javafx.scene.media.MediaPlayer;
+import tklibs.AudioUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -75,12 +79,19 @@ public class GameWindow extends JFrame{
 
     long lastUpdateTime;
     public void loop(){
+        AudioUtils.initialize();
+        MediaPlayer mediaPlayer = AudioUtils.playMedia("assets/music/1.mp3");
+        mediaPlayer.play();
         while(true){
+            mediaPlayer.setAutoPlay(true);
             long curentTime = System.currentTimeMillis();
             if (curentTime - lastUpdateTime > 17){
                 lastUpdateTime = curentTime;
                 Run();
                 Render();
+            }
+            if (Player.instance.life == 0 || BlackEnemy.life ==0){
+                break;
             }
         }
     }
@@ -92,8 +103,6 @@ public class GameWindow extends JFrame{
     private void Render() {
         backBufferGraphic2D.setColor(Color.black);
         backBufferGraphic2D.fillRect(0,0,this.getWidth(),this.getHeight());
-        backBufferGraphic2D.drawImage(backGround.renderer.image,0, (int) backGround.position.y,null);
-        GameObject.updateAllPicture();
         GameObject.renderALL(backBufferGraphic2D);
         Graphics2D g2d = (Graphics2D) this.getGraphics();
         g2d.drawImage(backBufferImage,0,0,null);

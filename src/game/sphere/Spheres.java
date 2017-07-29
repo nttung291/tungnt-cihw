@@ -2,6 +2,7 @@ package game.sphere;
 
 import game.Utils;
 import game.bases.*;
+import game.bases.renderer.ImageRenderer;
 import game.inputs.InputManager;
 
 import java.util.ArrayList;
@@ -52,7 +53,6 @@ public class Spheres extends GameObject{
         coolDown();
         super.run(parentPosition);
     }
-
 
     public void setInputManager(InputManager inputManager) {
         this.inputManager = inputManager;

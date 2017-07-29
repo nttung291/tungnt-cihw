@@ -1,48 +1,65 @@
 package game.player;
 
 import game.Utils;
-import game.bases.*;
-
-import static game.background.Settings.frameCounterSpellImage;
+import game.bases.GameObject;
+import game.bases.GameObjectPool;
+import game.bases.Vector2D;
+import game.bases.physics.BoxCollider;
+import game.bases.physics.PhysicBody;
+import game.bases.physics.Physics;
+import game.bases.renderer.Animation;
+import game.enemies.BlackEnemy;
+import game.enemies.BlueEnemy;
+import game.enemies.EnemyExplosion;
+import tklibs.AudioUtils;
 
 /**
  * Created by Nttung PC on 7/11/2017.
  */
-public class PlayerSpell extends GameObject{
+public class PlayerSpell extends GameObject implements PhysicBody{
 
-    ImageRenderer imageRenderer;
-    ImageRenderer imageRenderer1;
-    ImageRenderer imageRenderer2;
-    ImageRenderer imageRenderer3;
-
-
+    private BoxCollider boxCollider;
     public PlayerSpell() {
-        super();
-        this.imageRenderer = new ImageRenderer(Utils.loadAssetImage("player-spells/a/0.png"));
-        this.imageRenderer1 = new ImageRenderer(Utils.loadAssetImage("player-spells/a/1.png"));
-        this.imageRenderer2 = new ImageRenderer(Utils.loadAssetImage("player-spells/a/2.png"));
-        this.imageRenderer3 = new ImageRenderer(Utils.loadAssetImage("player-spells/a/3.png"));
-        renderer = imageRenderer;
+        this.renderer = new Animation(
+                Utils.loadAssetImage("player-spells/a/0.png"),
+                Utils.loadAssetImage("player-spells/a/1.png"),
+                Utils.loadAssetImage("player-spells/a/2.png"),
+                Utils.loadAssetImage("player-spells/a/3.png")
+        );
         boxCollider = new BoxCollider(20,20);
         this.children.add(boxCollider);
-        indentify = 2;
     }
-
-    @Override
-    public void updatePicture() {
-        if (frameCounterSpellImage.run()) {
-            if (renderer == imageRenderer) renderer = imageRenderer1;
-            else if (renderer == imageRenderer1) renderer = imageRenderer2;
-            else if (renderer == imageRenderer2) renderer = imageRenderer3;
-            else if (renderer == imageRenderer3) renderer = imageRenderer;
-            frameCounterSpellImage.reset();
+    public void hitEnemy(){
+        BlueEnemy hitEnemy  = Physics.bodyInRect(this.boxCollider,BlueEnemy.class);
+        BlackEnemy hitBlack = Physics.bodyInRect(this.boxCollider,BlackEnemy.class);
+        if (hitBlack!=null){
+            hitBlack.life-=1;
+            this.isActive = false;
+            if (hitBlack.life <=0){
+                hitBlack.isActive = false;
+            }
+        }
+        if (hitEnemy != null){
+            AudioUtils.playMedia("assets/music/sfx/enemy-explosion.wav");
+            EnemyExplosion explosion = GameObjectPool.recycle(EnemyExplosion.class);
+            explosion.position.set(hitEnemy.position);
+            hitEnemy.isActive = false;
+            this.isActive = false;
         }
     }
     @Override
     public void run(Vector2D parentPosition){
         super.run(parentPosition);
         this.position.addUp(0,-10);
+        hitEnemy();
+        if (this.position.y < 0){
+            this.isActive = false;
+        }
     }
 
 
+    @Override
+    public BoxCollider getBoxCollider() {
+        return this.boxCollider;
+    }
 }
