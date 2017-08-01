@@ -11,7 +11,7 @@ public class GameObjectPool extends GameObject{
     public static <T extends GameObject> T recycle (Class<T> classz){
         for (GameObject gameObject : pool){
             if (!gameObject.isActive() && gameObject.getClass() == classz){
-                gameObject.setActive(true);
+                gameObject.refresh();
                 return (T) gameObject;
             }
         }

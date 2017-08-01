@@ -2,7 +2,6 @@ package game.player;
 
 import game.Utils;
 import game.bases.GameObject;
-import game.bases.GameObjectPool;
 import game.bases.Vector2D;
 import game.bases.physics.BoxCollider;
 import game.bases.physics.PhysicBody;
@@ -10,7 +9,6 @@ import game.bases.physics.Physics;
 import game.bases.renderer.Animation;
 import game.enemies.BlackEnemy;
 import game.enemies.BlueEnemy;
-import game.enemies.EnemyExplosion;
 import tklibs.AudioUtils;
 
 /**
@@ -20,7 +18,7 @@ public class PlayerSpell extends GameObject implements PhysicBody{
 
     private BoxCollider boxCollider;
     public PlayerSpell() {
-        this.renderer = new Animation(
+        this.renderer = new Animation(1,true,
                 Utils.loadAssetImage("player-spells/a/0.png"),
                 Utils.loadAssetImage("player-spells/a/1.png"),
                 Utils.loadAssetImage("player-spells/a/2.png"),
@@ -41,10 +39,10 @@ public class PlayerSpell extends GameObject implements PhysicBody{
         }
         if (hitEnemy != null){
             AudioUtils.playMedia("assets/music/sfx/enemy-explosion.wav");
-            EnemyExplosion explosion = GameObjectPool.recycle(EnemyExplosion.class);
-            explosion.position.set(hitEnemy.position);
-            hitEnemy.isActive = false;
-            this.isActive = false;
+            if (hitEnemy != null){
+                hitEnemy.getHit(1);
+                this.isActive = false;
+            }
         }
     }
     @Override

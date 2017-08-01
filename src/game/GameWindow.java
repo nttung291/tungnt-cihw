@@ -4,7 +4,6 @@ import game.background.BackGround;
 import game.background.Settings;
 import game.bases.Contraints;
 import game.bases.GameObject;
-import game.enemies.BlackEnemy;
 import game.enemies.EnemySpawner;
 import game.inputs.InputManager;
 import game.player.Player;
@@ -89,9 +88,6 @@ public class GameWindow extends JFrame{
                 lastUpdateTime = curentTime;
                 Run();
                 Render();
-            }
-            if (Player.instance.life == 0 || BlackEnemy.life ==0){
-                break;
             }
         }
     }

@@ -72,6 +72,11 @@ public class BlueEnemy extends GameObject implements PhysicBody{
        }
     }
 
+    public void getHit(int damage){
+        this.isActive = false;
+        EnemyExplosion enemyExplosion = GameObjectPool.recycle(EnemyExplosion.class);
+        enemyExplosion.position.set(this.position);
+    }
 
     @Override
     public void run(Vector2D parentPosition) {

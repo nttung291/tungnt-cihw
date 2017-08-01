@@ -21,16 +21,6 @@ public class ImageRenderer implements Renderer{
         g.drawImage(image, (int)(position.x - image.getWidth() * anchor.x) , (int)(position.y - image.getHeight() * anchor.y ), null);
     }
 
-    @Override
-    public boolean getImageIndex() {
-        return false;
-    }
-
-    @Override
-    public void setImageIndex() {
-
-    }
-
     public float getWidth(){
         return image.getWidth();
     }

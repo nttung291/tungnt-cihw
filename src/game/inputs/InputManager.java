@@ -31,10 +31,6 @@ public class InputManager {
             case KeyEvent.VK_X:
                 xPressed = true;
                 break;
-            case KeyEvent.VK_Z:
-                 zPressed = true;
-                 break;
-
         }
     }
 
@@ -54,9 +50,6 @@ public class InputManager {
                 break;
             case KeyEvent.VK_X:
                 xPressed = false;
-                break;
-            case KeyEvent.VK_Z:
-                zPressed = false;
                 break;
         }
     }

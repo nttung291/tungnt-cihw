@@ -13,15 +13,23 @@ import java.util.List;
  */
 public class Animation implements Renderer{
     private List<BufferedImage> images;
-    public int imageIndex=0;
+    private int imageIndex;
     private FrameCounter frameCounter;
-    public Animation(int delayFrame,BufferedImage... imagesArr){
+    private boolean finished;
+    private boolean repeat;
+
+    public Animation(int delayFrame,boolean repeat,BufferedImage... imagesArr){
         this.images = Arrays.asList(imagesArr);
         frameCounter = new FrameCounter(delayFrame);
+        this.repeat = repeat;
     }
 
     public Animation(BufferedImage... imageArr) {
-        this(5,imageArr);
+        this(5,true,imageArr);
+    }
+
+    public boolean isFinished() {
+        return finished;
     }
 
     @Override
@@ -36,20 +44,20 @@ public class Animation implements Renderer{
                 null);
     }
 
-    @Override
-    public boolean getImageIndex() {
-        return imageIndex >= images.size()-1;
-    }
-
     private void changeIndex() {
-        imageIndex++;
-        if (imageIndex >= images.size()){
-            imageIndex = 0;
+        if (imageIndex == images.size()-1){
+            if (repeat){
+                imageIndex = 0;
+            }
+            finished = true;
+        }else{
+            imageIndex++;
         }
     }
 
-    public void setImageIndex(){
+    public void reset(){
         imageIndex = 0;
+        finished = false;
     }
 
 }

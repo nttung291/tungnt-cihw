@@ -3,7 +3,6 @@ package game.sphere;
 import game.Utils;
 import game.background.Settings;
 import game.bases.GameObject;
-import game.bases.GameObjectPool;
 import game.bases.Vector2D;
 import game.bases.physics.BoxCollider;
 import game.bases.physics.PhysicBody;
@@ -11,8 +10,8 @@ import game.bases.physics.Physics;
 import game.bases.renderer.ImageRenderer;
 import game.enemies.BlackEnemy;
 import game.enemies.BlueEnemy;
-import game.enemies.EnemyExplosion;
 import game.enemies.EnemySpawner;
+import tklibs.AudioUtils;
 
 /**
  * Created by Nttung PC on 7/24/2017.
@@ -47,10 +46,11 @@ public class SphereBullet extends GameObject  implements PhysicBody {
             }
         }
         if (hitEnemy != null && hitEnemy.isActive){
-            EnemyExplosion explosion = GameObjectPool.recycle(EnemyExplosion.class);
-            explosion.position.set(hitEnemy.position);
-            hitEnemy.isActive = false;
-            this.isActive = false;
+            AudioUtils.playMedia("assets/music/sfx/enemy-explosion.wav");
+            if (hitEnemy != null){
+                hitEnemy.getHit(1);
+                this.isActive = false;
+            }
         }
     }
     @Override

@@ -87,4 +87,9 @@ public class GameObject {
            child.run(this.screenPosition);
        }
     }
+
+    public void  refresh(){
+        isActive = true;
+
+    }
 }

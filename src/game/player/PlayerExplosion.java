@@ -8,10 +8,11 @@ import game.bases.renderer.Animation;
 /**
  * Created by Nttung PC on 7/27/2017.
  */
-public class Explosion extends GameObject{
-    public Explosion() {
+public class PlayerExplosion extends GameObject{
+    private Animation animation;
+    public PlayerExplosion() {
         super();
-        this.renderer = new Animation(
+        this.animation = new Animation(5,false,
                 Utils.loadAssetImage("players/explosions/0.png"),
                 Utils.loadAssetImage("players/explosions/1.png"),
                 Utils.loadAssetImage("players/explosions/2.png"),
@@ -21,16 +22,14 @@ public class Explosion extends GameObject{
                 Utils.loadAssetImage("players/explosions/6.png"),
                 Utils.loadAssetImage("players/explosions/7.png")
         );
+        this.renderer = animation;
     }
 
-    public void norender(){
-        if (renderer.getImageIndex()){
-            this.setActive(false);
-        }
-    }
     @Override
     public void run(Vector2D parentPosition) {
-        norender();
         super.run(parentPosition);
+        if (this.animation.isFinished()){
+            this.isActive = false;
+        }
     }
 }

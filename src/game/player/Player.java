@@ -8,7 +8,6 @@ import game.bases.Vector2D;
 import game.bases.physics.BoxCollider;
 import game.bases.physics.PhysicBody;
 import game.bases.renderer.ImageRenderer;
-import game.enemies.BlueEnemy;
 import game.inputs.InputManager;
 import game.sphere.Spheres;
 import tklibs.AudioUtils;
@@ -27,9 +26,10 @@ public class Player extends GameObject implements PhysicBody{
     Spheres rightSphere;
 
     public static Player instance;
-    public int life = 100;
+    public int life = 10;
 
     boolean spellDisabled;
+    boolean play;
 
     BoxCollider boxCollider;
 
@@ -45,8 +45,18 @@ public class Player extends GameObject implements PhysicBody{
         this.children.add(rightSphere);
         boxCollider = new BoxCollider(20,30);
         children.add(boxCollider);
+        play = true;
     }
 
+    public void explore(){
+        if (!this.isActive && life >= 0 && play){
+            AudioUtils.playMedia("assets/music/sfx/player-dead.wav");
+            PlayerExplosion playerExplosion = GameObjectPool.recycle(PlayerExplosion.class);
+            playerExplosion.position.set(this.position);
+            this.isActive = false;
+            play = false;
+        }
+    }
 
     public void setContraints(Contraints contraints) {
         this.contraints = contraints;
@@ -58,7 +68,7 @@ public class Player extends GameObject implements PhysicBody{
         move();
         castSpell();
         coolDown();
-        explosion();
+        explore();
     }
 
     private void castSpell() {
@@ -72,18 +82,6 @@ public class Player extends GameObject implements PhysicBody{
         }
     }
 
-    private void explosion(){
-        if (inputManager.zPressed){
-            for (GameObject gameObject : gameObjects){
-                if (gameObject.getClass() == BlueEnemy.class && gameObject.isActive){
-                    Explosion explosion = new Explosion();
-                    explosion.position.set(gameObject.position);
-                    GameObject.add(explosion);
-                    gameObject.setActive(false);
-                }
-            }
-        }
-    }
 
     private void move() {
         this.verlocity.set(0,0);
